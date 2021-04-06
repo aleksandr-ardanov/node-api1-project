@@ -21,7 +21,7 @@ server.get('/api/users/:id', (req,res) => {
     const id = req.params.id
     users.findById(id)
         .then(u => {
-            u ? res.status(200).json(u): res.status(404).json('The user with the specified ID does not exist')
+            u ? res.status(200).json(u): res.status(404).json({message:'The user with the specified ID does not exist'})
         })
         .catch(() => {
             res.status(500).json({message:'The user information could not be retrieved'})
@@ -50,12 +50,12 @@ server.put('/api/users/:id', async (req,res) => {
      
     try{
         if(!update.name || !update.bio){
-            res.status(400).json('Please provide name and bio for the user')
+            res.status(400).json({message:'Please provide name and bio for the user'})
         }
         else{
             const updatedUser = await users.update(id, update)
             if(!updatedUser){
-                res.status(404).json("The user with the specified ID does not exist")
+                res.status(404).json({message:"The user with the specified ID does not exist"})
             }
             else{
                 res.status(200).json(updatedUser)
@@ -71,7 +71,7 @@ server.delete('/api/users/:id', (req,res) => {
     const id = req.params.id;
     users.remove(id)
         .then(u => {
-            u ? res.status(201).json(u) : res.status(404).json("The user with the specified ID does not exist")
+            u ? res.status(201).json(u) : res.status(404).json({message:"The user with the specified ID does not exist"})
         })
         .catch(() => {
             res.status(500).json({message: 'The user could not be removed'})
